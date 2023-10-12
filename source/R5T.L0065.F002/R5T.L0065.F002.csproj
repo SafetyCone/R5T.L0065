@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Main">
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1573;1587;1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Label="Package">
+    <Version>1.0.0</Version>
+    <Authors>DCoats</Authors>
+    <Company>Rivet</Company>
+    <Copyright>Copyright © Rivet 2023</Copyright>
+    <Description>Identity string generation from signature type functionality.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\R5T.L0065.T000\R5T.L0065.T000.csproj" />
+    <ProjectReference Include="..\..\..\R5T.L0062\source\R5T.L0062.T000\R5T.L0062.T000.csproj" />
+    <ProjectReference Include="..\..\..\R5T.L0062\source\R5T.L0062.F000\R5T.L0062.F000.csproj" />
+    <ProjectReference Include="..\..\..\R5T.L0063\source\R5T.L0063.F000\R5T.L0063.F000.csproj" />
+    <ProjectReference Include="..\..\..\R5T.L0062\source\R5T.L0062.Z000\R5T.L0062.Z000.csproj" />
+  </ItemGroup>
+</Project>
