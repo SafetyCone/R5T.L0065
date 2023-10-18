@@ -5,6 +5,9 @@ using R5T.T0142;
 
 namespace R5T.L0065.T000
 {
+    /// <summary>
+    /// A signature structure for representing event members.
+    /// </summary>
     [DataTypeMarker]
     public class EventSignature : Signature, IEquatable<EventSignature>
     {
@@ -31,18 +34,7 @@ namespace R5T.L0065.T000
 
         public override string ToString()
         {
-            var declaringTypeName = this.DeclaringType.ToString();
-
-            var typeNamedEventName = Instances.NamespacedTypeNameOperator.Combine(
-                declaringTypeName,
-                this.EventName);
-
-            var eventHandlerTypeName = this.EventHandlerType.ToString();
-
-            var output = Instances.TypeNameOperator.Append_OutputTypeName(
-                typeNamedEventName,
-                eventHandlerTypeName);
-
+            var output = Instances.EventSignatureOperator.ToString(this);
             return output;
         }
 

@@ -19,5 +19,13 @@ namespace R5T.L0065.T000
 
             return output;
         }
+
+        public string ToString(MethodParameter methodParameter)
+        {
+            var parameterTypeName = Instances.TypeSignatureOperator.ToString(methodParameter.ParameterType);
+
+            var output = $"{methodParameter.ParameterName}: {parameterTypeName}";
+            return output;
+        }
     }
 }

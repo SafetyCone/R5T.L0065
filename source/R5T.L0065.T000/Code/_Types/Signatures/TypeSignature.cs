@@ -48,44 +48,7 @@ namespace R5T.L0065.T000
 
         public override string ToString()
         {
-            string output;
-
-            if (this.Is_Nested)
-            {
-                var nestedParentTypeName = this.NestedTypeParent.ToString();
-
-                output = Instances.TypeNameOperator.Append_NestedTypeName(
-                    nestedParentTypeName,
-                    this.TypeName);
-
-                return output;
-            }
-
-            if (this.Has_ElementType)
-            {
-                var elementTypeName = this.ElementType.ToString();
-
-                output = Instances.ElementTypeRelationshipOperator.Append_ElementTypeRelationshipMarkers(
-                    elementTypeName,
-                    this.ElementTypeRelationships,
-                    Instances.TypeNameAffixes.Array_Suffix,
-                    Instances.TypeNameAffixes.ByReference_Suffix_String,
-                    Instances.TypeNameAffixes.Pointer_Suffix_String);
-
-                return output;
-            }
-
-            if (this.Is_GenericTypeParameter || this.Is_GenericMethodParameter)
-            {
-                output = this.TypeName;
-
-                return output;
-            }   
-
-            output = Instances.NamespacedTypeNameOperator.Get_NamespacedTypeName(
-                this.NamespaceName,
-                this.TypeName);
-
+            var output = Instances.TypeSignatureOperator.ToString(this);
             return output;
         }
 

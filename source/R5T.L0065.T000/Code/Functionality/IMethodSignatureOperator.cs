@@ -36,5 +36,13 @@ namespace R5T.L0065.T000
 
             return output;
         }
+
+        public string ToString(MethodSignature methodSignature)
+        {
+            var returnTypeName = Instances.TypeSignatureOperator.ToString(methodSignature.ReturnType);
+
+            var output = $"{methodSignature.MethodName}: {returnTypeName}";
+            return output;
+        }
     }
 }

@@ -5,6 +5,9 @@ using R5T.T0142;
 
 namespace R5T.L0065.T000
 {
+    /// <summary>
+    /// Signature structure for representing properties.
+    /// </summary>
     [DataTypeMarker]
     public class PropertySignature : Signature,
         IHasDeclaringType,
@@ -23,6 +26,12 @@ namespace R5T.L0065.T000
         public PropertySignature()
         {
             this.KindMarker = Instances.KindMarkers.Property;
+        }
+
+        public override string ToString()
+        {
+            var output = Instances.PropertySignatureOperator.ToString(this);
+            return output;
         }
     }
 }

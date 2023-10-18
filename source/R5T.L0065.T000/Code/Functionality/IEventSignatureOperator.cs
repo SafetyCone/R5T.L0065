@@ -28,5 +28,22 @@ namespace R5T.L0065.T000
 
             return output;
         }
+
+        public string ToString(EventSignature eventSignature)
+        {
+            var declaringTypeName = eventSignature.DeclaringType.ToString();
+
+            var typeNamedEventName = Instances.NamespacedTypeNameOperator.Combine(
+                declaringTypeName,
+                eventSignature.EventName);
+
+            var eventHandlerTypeName = eventSignature.EventHandlerType.ToString();
+
+            var output = Instances.TypeNameOperator.Append_OutputTypeName(
+                typeNamedEventName,
+                eventHandlerTypeName);
+
+            return output;
+        }
     }
 }

@@ -32,5 +32,13 @@ namespace R5T.L0065.T000
 
             return output;
         }
+
+        public string ToString(PropertySignature propertySignature)
+        {
+            var propertyTypeName = Instances.TypeSignatureOperator.ToString(propertySignature.PropertyType);
+
+            var output = $"{propertySignature.PropertyName}: {propertyTypeName}";
+            return output;
+        }
     }
 }

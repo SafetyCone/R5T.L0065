@@ -5,6 +5,9 @@ using R5T.T0142;
 
 namespace R5T.L0065.T000
 {
+    /// <summary>
+    /// Signature structure representing methods.
+    /// </summary>
     [DataTypeMarker]
     public class MethodSignature : Signature,
         IHasDeclaringType,
@@ -30,6 +33,12 @@ namespace R5T.L0065.T000
         public MethodSignature()
         {
             this.KindMarker = Instances.KindMarkers.Method;
+        }
+
+        public override string ToString()
+        {
+            var output = Instances.MethodSignatureOperator.ToString(this);
+            return output;
         }
     }
 }

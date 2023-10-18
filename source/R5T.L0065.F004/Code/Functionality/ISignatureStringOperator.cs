@@ -7,7 +7,7 @@ using R5T.N0000;
 using R5T.T0132;
 
 using R5T.L0065.T000;
-using System.Security.Cryptography.X509Certificates;
+
 
 namespace R5T.L0065.F004
 {
@@ -373,114 +373,6 @@ namespace R5T.L0065.F004
             }
 
             return output;
-
-            //// Decompose the type signature.
-            //int indexOfLastNamespaceTokenSeparator = Instances.Indices.NotFound;
-            //int indexOfGenericTypeInputListStart = Instances.Indices.NotFound;
-
-            //bool typeNameEncountered = false;
-            //bool hasGenericTypeInputsList = false;
-            //bool inGenericTypeInputsList = false;
-
-            //var index = 0;
-            //foreach (var character in typeSignatureStringValue)
-            //{
-            //    if (character == Instances.TokenSeparators.NamespaceTokenSeparator
-            //        && !inGenericTypeInputsList)
-            //    {
-            //        indexOfLastNamespaceTokenSeparator = index;
-            //    }
-
-            //    if (character == Instances.TokenSeparators.GenericTypeListOpenTokenSeparator
-            //        && !inGenericTypeInputsList)
-            //    {
-            //        inGenericTypeInputsList = true;
-            //        hasGenericTypeInputsList = true;
-
-            //        indexOfGenericTypeInputListStart = index;
-
-            //        typeNameEncountered = true;
-
-            //        output.NamespaceName = Instances.StringOperator.Get_Substring_Upto_Exclusive(
-            //            indexOfLastNamespaceTokenSeparator,
-            //            typeSignatureStringValue);
-
-            //        output.TypeName = Instances.StringOperator.Get_Substring_From_Exclusive_To_Exclusive(
-            //            indexOfLastNamespaceTokenSeparator,
-            //            index,
-            //            typeSignatureStringValue);
-            //    }
-
-            //    if (character == Instances.TokenSeparators.GenericTypeListCloseTokenSeparator
-            //        && inGenericTypeInputsList)
-            //    {
-            //        inGenericTypeInputsList = false;
-
-            //        var genericTypeInputsList = Instances.StringOperator.Get_Substring_From_Inclusive_To_Inclusive(
-            //            indexOfGenericTypeInputListStart,
-            //            index,
-            //            typeSignatureStringValue);
-
-            //        output.GenericTypeInputs = this.Parse_TypesList(genericTypeInputsList);
-            //    }
-            //    else
-            //    {
-            //        output.GenericTypeInputs = Instances.ArrayOperator.Empty<TypeSignature>();
-            //    }
-
-            //    if (character == Instances.TokenSeparators.NestedTypeNameTokenSeparator)
-            //    {
-            //        // Everything so far should be constructed into a type signature, and made the nested parent type signature for the current signaure.
-            //        typeNameEncountered = true;
-
-            //        // Otherwise, this would have been done already.
-            //        if (!hasGenericTypeInputsList)
-            //        {
-            //            output.NamespaceName = Instances.StringOperator.Get_Substring_Upto_Exclusive(
-            //                indexOfLastNamespaceTokenSeparator,
-            //                typeSignatureStringValue);
-
-            //            output.TypeName = Instances.StringOperator.Get_Substring_From_Exclusive_To_Exclusive(
-            //                indexOfLastNamespaceTokenSeparator,
-            //                index,
-            //                typeSignatureStringValue);
-            //        }
-
-            //        var nestedTypeParent = Instances.TypeSignatureOperator.Copy(output);
-
-            //        Instances.TypeSignatureOperator.Reset(output);
-
-            //        output.NestedTypeParent = nestedTypeParent;
-            //        output.Is_Nested = true;
-
-            //        // Reset.
-            //        typeNameEncountered = false;
-            //        hasGenericTypeInputsList = false;
-            //        indexOfGenericTypeInputListStart = Instances.Indices.NotFound;
-            //        // Treat the nested type name token separator as a namespace token separator.
-            //        indexOfLastNamespaceTokenSeparator = index;
-            //    }
-
-            //    index++;
-            //}
-
-            //if (!typeNameEncountered)
-            //{
-            //    // If the type name has not been encountered, then the type is not nested, and does not have generic type inputs.
-            //    if (!output.Is_Nested)
-            //    {
-            //        output.NamespaceName = Instances.StringOperator.Get_Substring_Upto_Exclusive(
-            //               indexOfLastNamespaceTokenSeparator,
-            //               typeSignatureStringValue);
-            //    }
-
-            //    output.TypeName = Instances.StringOperator.Get_Substring_From_Exclusive_To_Exclusive(
-            //        indexOfLastNamespaceTokenSeparator,
-            //        index,
-            //        typeSignatureStringValue);
-            //}
-
-            //return output;
         }
 
         public TypeSignature[] Parse_TypesList(string typesList)

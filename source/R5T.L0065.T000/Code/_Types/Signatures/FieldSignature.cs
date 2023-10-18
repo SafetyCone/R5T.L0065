@@ -5,6 +5,9 @@ using R5T.T0142;
 
 namespace R5T.L0065.T000
 {
+    /// <summary>
+    /// A signature structure for representing field members.
+    /// </summary>
     [DataTypeMarker]
     public class FieldSignature : Signature, IEquatable<FieldSignature>
     {
@@ -20,18 +23,7 @@ namespace R5T.L0065.T000
 
         public override string ToString()
         {
-            var declaringTypeName = this.DeclaringType.ToString();
-
-            var typeNamedEventName = Instances.NamespacedTypeNameOperator.Combine(
-                declaringTypeName,
-                this.FieldName);
-
-            var eventHandlerTypeName = this.FieldType.ToString();
-
-            var output = Instances.TypeNameOperator.Append_OutputTypeName(
-                typeNamedEventName,
-                eventHandlerTypeName);
-
+            var output = Instances.FieldSignatureOperator.ToString(this);
             return output;
         }
 

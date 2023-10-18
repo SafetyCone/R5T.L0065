@@ -124,5 +124,48 @@ namespace R5T.L0065.T000
             typeSignature.ElementType = default;
             typeSignature.ElementTypeRelationships = default;
         }
+
+        public string ToString(TypeSignature typeSignature)
+        {
+            string output;
+
+            if (typeSignature.Is_Nested)
+            {
+                var nestedParentTypeName = typeSignature.NestedTypeParent.ToString();
+
+                output = Instances.TypeNameOperator.Append_NestedTypeName(
+                    nestedParentTypeName,
+                    typeSignature.TypeName);
+
+                return output;
+            }
+
+            if (typeSignature.Has_ElementType)
+            {
+                var elementTypeName = typeSignature.ElementType.ToString();
+
+                output = Instances.ElementTypeRelationshipOperator.Append_ElementTypeRelationshipMarkers(
+                    elementTypeName,
+                    typeSignature.ElementTypeRelationships,
+                    Instances.TypeNameAffixes.Array_Suffix,
+                    Instances.TypeNameAffixes.ByReference_Suffix_String,
+                    Instances.TypeNameAffixes.Pointer_Suffix_String);
+
+                return output;
+            }
+
+            if (typeSignature.Is_GenericTypeParameter || typeSignature.Is_GenericMethodParameter)
+            {
+                output = typeSignature.TypeName;
+
+                return output;
+            }
+
+            output = Instances.NamespacedTypeNameOperator.Get_NamespacedTypeName(
+                typeSignature.NamespaceName,
+                typeSignature.TypeName);
+
+            return output;
+        }
     }
 }
