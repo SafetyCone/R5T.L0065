@@ -9,27 +9,67 @@ namespace R5T.L0065.T000
     [FunctionalityMarker]
     public partial interface ISignatureOperator : IFunctionalityMarker
     {
+        public TOutput SignatureTypeSwitch<TOutput>(
+            Signature signature,
+            Func<EventSignature, TOutput> eventSignatureFunction,
+            Func<FieldSignature, TOutput> fieldSignatureFunction,
+            Func<PropertySignature, TOutput> propertySignatureFunction,
+            Func<MethodSignature, TOutput> methodSignatureFunction,
+            Func<TypeSignature, TOutput> typeSignatureFunction)
+        {
+            var output = signature switch
+            {
+                EventSignature eventSignature => eventSignatureFunction(eventSignature),
+                FieldSignature fieldSignature => fieldSignatureFunction(fieldSignature),
+                PropertySignature propertySignature => propertySignatureFunction(propertySignature),
+                MethodSignature methodSignature => methodSignatureFunction(methodSignature),
+                TypeSignature typeSignature => typeSignatureFunction(typeSignature),
+                _ => throw Instances.ExceptionOperator.Get_UnrecognizedSignatureType(signature)
+            };
+
+            return output;
+        }
+
+        public TOutput SignatureTypeSwitch<TOutput>(
+            Signature signatureA,
+            Signature signatureB,
+            Func<EventSignature, EventSignature, TOutput> eventSignatureFunction,
+            Func<FieldSignature, FieldSignature, TOutput> fieldSignatureFunction,
+            Func<PropertySignature, PropertySignature, TOutput> propertySignatureFunction,
+            Func<MethodSignature, MethodSignature, TOutput> methodSignatureFunction,
+            Func<TypeSignature, TypeSignature, TOutput> typeSignatureFunction)
+        {
+            var output = this.SignatureTypeSwitch(
+                signatureA,
+                eventSignature => eventSignatureFunction(eventSignature, signatureB as EventSignature),
+                fieldSignature => fieldSignatureFunction(fieldSignature, signatureB as FieldSignature),
+                propertySignature => propertySignatureFunction(propertySignature, signatureB as PropertySignature),
+                methodSignature => methodSignatureFunction(methodSignature, signatureB as MethodSignature),
+                typeSignature => typeSignatureFunction(typeSignature, signatureB as TypeSignature));
+
+            return output;
+        }
+
         /// <summary>
         /// Handles all signature types.
         /// </summary>
-        public bool Are_Equal_ByValue(Signature a, Signature b)
+        public bool Are_Equal_ByValue(Signature signatureA, Signature signatureB)
         {
-            var typeDeterminesEquality = Instances.TypeOperator.TypeDeterminesEquality(a, b, out var typesAreEqual);
+            var typeDeterminesEquality = Instances.TypeOperator.TypeCheckDeterminesEquality(signatureA, signatureB, out var typesAreEqual);
             if(typeDeterminesEquality)
             {
                 return typesAreEqual;
             }
             // Now we know the derived types are the same.
 
-            var output = a switch
-            {
-                EventSignature eventSignature => Instances.EventSignatureOperator.Are_Equal_ByValue(eventSignature, b as EventSignature),
-                FieldSignature fieldSignature => Instances.FieldSignatureOperator.Are_Equal_ByValue(fieldSignature, b as FieldSignature),
-                PropertySignature propertySignature => Instances.PropertySignatureOperator.Are_Equal_ByValue(propertySignature, b as PropertySignature),
-                MethodSignature methodSignature => Instances.MethodSignatureOperator.Are_Equal_ByValue(methodSignature, b as MethodSignature),
-                TypeSignature typeSignature => Instances.TypeSignatureOperator.Are_Equal_ByValue(typeSignature, b as TypeSignature),
-                _ => throw Instances.ExceptionOperator.Get_UnrecognizedSignatureType(a)
-            };
+            var output = this.SignatureTypeSwitch(
+                signatureA,
+                signatureB,
+                Instances.EventSignatureOperator.Are_Equal_ByValue,
+                Instances.FieldSignatureOperator.Are_Equal_ByValue,
+                Instances.PropertySignatureOperator.Are_Equal_ByValue,
+                Instances.MethodSignatureOperator.Are_Equal_ByValue,
+                Instances.TypeSignatureOperator.Are_Equal_ByValue);
 
             return output;
         }

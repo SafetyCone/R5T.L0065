@@ -245,7 +245,7 @@ namespace R5T.L0065.F002
             if (parameterTypeSignature.Is_GenericTypeParameter)
             {
                 // If the generic type parameter is in a conversion operator, special type name rules apply.
-                if(isConversionOperator)
+                if (isConversionOperator)
                 {
                     var output = parameterTypeSignature.TypeName;
                     return output;

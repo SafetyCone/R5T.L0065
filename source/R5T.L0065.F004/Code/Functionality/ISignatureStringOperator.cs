@@ -293,13 +293,16 @@ namespace R5T.L0065.F004
                 var hasGenericInputsList = this.Has_GenericInputsList(nestedTypeName);
                 if(hasGenericInputsList)
                 {
-                    var indexOfGenericTypeInputsListStartToken = Instances.StringOperator.Get_IndexOf(
-                        nestedTypeName,
-                        Instances.TokenSeparators.GenericTypeListOpenTokenSeparator);
+                    var genericInputsListRanges = this.Get_GenericInputListRanges(nestedTypeName);
 
-                    var (typeName, genericInputsList) = Instances.StringOperator.Partition_OrFirstPartIfNotFound(
-                        indexOfGenericTypeInputsListStartToken,
+                    // There should only be one for types!
+                    var genericInputsListRange = genericInputsListRanges.Single();
+
+                    var typeName = Instances.StringOperator.Get_Substring_Upto_Exclusive(
+                        genericInputsListRange.Start.Value,
                         nestedTypeName);
+
+                    var genericInputsList = nestedTypeName[genericInputsListRange];
 
                     output.GenericTypeInputs = this.Parse_TypesList(genericInputsList);
                     output.TypeName = typeName;
@@ -320,13 +323,16 @@ namespace R5T.L0065.F004
                 var hasGenericInputsList = this.Has_GenericInputsList(typeSignatureStringValue);
                 if (hasGenericInputsList)
                 {
-                    var indexOfGenericTypeInputsListStartToken = Instances.StringOperator.Get_IndexOf(
-                        typeSignatureStringValue,
-                        Instances.TokenSeparators.GenericTypeListOpenTokenSeparator);
+                    var genericInputsListRanges = this.Get_GenericInputListRanges(typeSignatureStringValue);
 
-                    var (namespacedTypeName, genericInputsList) = Instances.StringOperator.Partition_OrFirstPartIfNotFound(
-                        indexOfGenericTypeInputsListStartToken,
+                    // There should only be one for types!
+                    var genericInputsListRange = genericInputsListRanges.Single();
+
+                    var namespacedTypeName = Instances.StringOperator.Get_Substring_Upto_Exclusive(
+                        genericInputsListRange.Start.Value,
                         typeSignatureStringValue);
+
+                    var genericInputsList = typeSignatureStringValue[genericInputsListRange];
 
                     output.GenericTypeInputs = this.Parse_TypesList(genericInputsList);
 

@@ -12,6 +12,7 @@ namespace R5T.L0065.F003
         public static L0063.F000.IMemberNameOperator MemberNameOperator => L0063.F000.MemberNameOperator.Instance;
         public static ISignatureOperator SignatureOperator => F003.SignatureOperator.Instance;
         public static ISignatureStringOperator SignatureStringOperator => F003.SignatureStringOperator.Instance;
+        public static L0053.IStringOperator StringOperator => L0053.StringOperator.Instance;
         public static Z0000.IStrings Strings => Z0000.Strings.Instance;
         public static ITokens Tokens => F003.Tokens.Instance;
         public static L0063.Z000.ITokenSeparators TokenSeparators => L0063.Z000.TokenSeparators.Instance;

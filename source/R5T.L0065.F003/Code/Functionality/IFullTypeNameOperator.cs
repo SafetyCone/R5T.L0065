@@ -45,9 +45,19 @@ namespace R5T.L0065.F003
                 }
                 else
                 {
-                    typeIdentityString = Instances.SignatureStringOperator.Combine(
-                        typeSignature.NamespaceName,
-                        typeSignature.TypeName);
+                    var namespaceName = typeSignature.NamespaceName;
+
+                    var namespaceNameIsNullOrEmpty = Instances.StringOperator.Is_NullOrEmpty(namespaceName);
+                    if (namespaceNameIsNullOrEmpty)
+                    {
+                        typeIdentityString = typeSignature.TypeName;
+                    }
+                    else
+                    {
+                        typeIdentityString = Instances.SignatureStringOperator.Combine(
+                            typeSignature.NamespaceName,
+                            typeSignature.TypeName);
+                    }
                 }
             }
 
