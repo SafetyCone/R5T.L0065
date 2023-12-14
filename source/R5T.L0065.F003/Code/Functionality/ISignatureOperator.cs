@@ -35,6 +35,14 @@ namespace R5T.L0065.F003
             return output;
         }
 
+        public string Get_SignatureStringValue(Signature signature)
+        {
+            var signatureString = this.Get_SignatureString(signature);
+
+            var output = Instances.KindMarkerOperator.Remove_TypeKindMarker(signatureString.Value);
+            return output;
+        }
+
         public string Get_SignatureString_ForEvent(EventSignature eventSignature)
         {
             var declaringTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(eventSignature.DeclaringType);

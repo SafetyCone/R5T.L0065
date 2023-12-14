@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace R5T.L0065.T000
 {
+    /// <summary>
+    /// Compares two type signature instances on the basis of their (simple) type names alone.
+    /// </summary>
     public class TypeNameBasedTypeSignatureEqualityComparer : IEqualityComparer<TypeSignature>
     {
         #region Static

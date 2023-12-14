@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 
 using R5T.T0132;
@@ -10,6 +11,47 @@ namespace R5T.L0065.T000
     [FunctionalityMarker]
     public partial interface ITypeSignatureOperator : IFunctionalityMarker
     {
+        /// <summary>
+        /// Uses the rules of C# type identity to compare two types.
+        /// Those rules consider only:
+        /// 1. Namespace (including parent nested types, if present)
+        /// 2. Type name (the simple type name)
+        /// 3. The number of generic type parameters (if the type is generic)
+        /// 4. Its element type (if the type is an array, or by-reference type).
+        /// </summary>
+        public bool Are_Equal_ByIdentity(TypeSignature a, TypeSignature b)
+        {
+            var output = Instances.NullOperator.NullCheckDeterminesEquality_Else(a, b,
+                (a, b) =>
+                {
+                    var output = true;
+
+                    output &= a.TypeName == b.TypeName;
+                    output &= a.NamespaceName == b.NamespaceName;
+                    output &= a.Is_Nested == b.Is_Nested;
+                    output &= this.Are_Equal_ByValue(
+                        a.NestedTypeParent,
+                        b.NestedTypeParent);
+                    output &= a.Is_GenericMethodParameter == b.Is_GenericMethodParameter;
+                    output &= a.Is_GenericTypeParameter == b.Is_GenericTypeParameter;
+
+                    var genericTypeInputsCountA = this.Get_GenericTypeInputsCount(a);
+                    var genericTypeInputsCountB = this.Get_GenericTypeInputsCount(b);
+
+                    output &= genericTypeInputsCountA == genericTypeInputsCountB;
+
+                    output &= a.Has_ElementType == b.Has_ElementType;
+                    output &= a.ElementTypeRelationships == b.ElementTypeRelationships;
+                    output &= this.Are_Equal_ByValue(
+                        a.ElementType,
+                        b.ElementType);
+
+                    return output;
+                });
+
+            return output;
+        }
+
         public bool Are_Equal_ByValue(TypeSignature a, TypeSignature b)
         {
             var output = Instances.SignatureOperator.Are_Equal_ByValue_SignatureOnly(a, b,
@@ -84,6 +126,56 @@ namespace R5T.L0065.T000
             };
 
             return output;
+        }
+
+        public int Get_GenericTypeInputsCount(TypeSignature typeSignature)
+        {
+            var isNullOrEmpty = Instances.ArrayOperator.Is_NullOrEmpty(typeSignature.GenericTypeInputs);
+
+            var output = isNullOrEmpty
+                ? 0
+                : typeSignature.GenericTypeInputs.Length;
+                ;
+
+            return output;
+        }
+
+        /// <inheritdoc cref="Are_Equal_ByIdentity(TypeSignature, TypeSignature)"/>
+        public int Get_HashCode_ForIdentity(TypeSignature obj)
+        {
+            // For generic type parameters, only the type name matter.
+            var isGenericTypeParameter = obj.Is_GenericMethodParameter || obj.Is_GenericTypeParameter;
+            if (isGenericTypeParameter)
+            {
+                var output = obj.TypeName.GetHashCode();
+                return output;
+            }
+            else
+            {
+                var forNestedParent = obj.Is_Nested
+                    ? this.Get_HashCode_ForIdentity(obj.NestedTypeParent)
+                    : Instances.HashCodes.For_Null_Fixed
+                    ;
+
+                var forElementType = obj.Has_ElementType
+                    ? HashCode.Combine(
+                        this.Get_HashCode_ForIdentity(obj.ElementType),
+                        // Don't forget the element type relationship itself!
+                        obj.ElementTypeRelationships)
+                    : Instances.HashCodes.For_Null_Fixed
+                    ;
+
+                var genericTypeInputCount = this.Get_GenericTypeInputsCount(obj);
+
+                var output = HashCode.Combine(
+                    obj.NamespaceName,
+                    obj.TypeName,
+                    genericTypeInputCount,
+                    forNestedParent,
+                    forElementType);
+
+                return output;
+            }
         }
 
         public TypeSignature[] Get_NestedTypeGenericTypeInputs(TypeSignature typeSignature)

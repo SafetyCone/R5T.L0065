@@ -10,6 +10,7 @@ namespace R5T.L0065.T000
         public static IEventSignatureOperator EventSignatureOperator => T000.EventSignatureOperator.Instance;
         public static IExceptionOperator ExceptionOperator => T000.ExceptionOperator.Instance;
         public static IFieldSignatureOperator FieldSignatureOperator => T000.FieldSignatureOperator.Instance;
+        public static L0066.IHashCodes HashCodes => L0066.HashCodes.Instance;
         public static L0062.L001.IKindMarkers KindMarkers => L0062.L001.KindMarkers.Instance;
         public static L0053.IMemberInfoOperator MemberInfoOperator => L0053.MemberInfoOperator.Instance;
         public static IMethodParameterOperator MethodParameterOperator => T000.MethodParameterOperator.Instance;

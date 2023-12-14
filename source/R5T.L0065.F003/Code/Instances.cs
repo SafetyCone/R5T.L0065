@@ -9,6 +9,7 @@ namespace R5T.L0065.F003
         public static T0221.IElementTypeRelationshipOperator ElementTypeRelationshipOperator => T0221.ElementTypeRelationshipOperator.Instance;
         public static T000.IExceptionOperator ExceptionOperator => T000.ExceptionOperator.Instance;
         public static IFullTypeNameOperator FullTypeNameOperator => F003.FullTypeNameOperator.Instance;
+        public static L0062.L001.IKindMarkerOperator KindMarkerOperator => L0062.L001.KindMarkerOperator.Instance;
         public static L0063.F000.IMemberNameOperator MemberNameOperator => L0063.F000.MemberNameOperator.Instance;
         public static ISignatureOperator SignatureOperator => F003.SignatureOperator.Instance;
         public static ISignatureStringOperator SignatureStringOperator => F003.SignatureStringOperator.Instance;
