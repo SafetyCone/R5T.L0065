@@ -21,6 +21,72 @@ namespace R5T.L0065.F004
             return output;
         }
 
+        public MethodSignature Get_MethodSignature(string methodSignatureString)
+        {
+            var kindMarker = this.Get_KindMarker(methodSignatureString);
+
+            if (kindMarker != IKindMarkers.Method_Constant)
+            {
+                throw new Exception($"Method signature string did not begin with the method signature string marker.");
+            }
+
+            var signatureStringValueMaybeObsolete = this.Get_SignatureStringValue(methodSignatureString);
+
+            var signatureStringValue = this.Get_SignatureStringValue_WithoutObsolete_IfObsolete(
+                signatureStringValueMaybeObsolete,
+                out var isObsolete);
+
+            var output = this.Get_MethodSignature_Internal(signatureStringValue);
+
+            output.IsObsolete = isObsolete;
+
+            return output;
+        }
+
+        public TypeSignature Get_TypeSignature(string typeSignatureString)
+        {
+            var kindMarker = this.Get_KindMarker(typeSignatureString);
+
+            if (kindMarker != IKindMarkers.Type_Constant)
+            {
+                throw new Exception($"Type signature string did not begin with the type signature string marker.");
+            }
+
+            var signatureStringValueMaybeObsolete = this.Get_SignatureStringValue(typeSignatureString);
+
+            var signatureStringValue = this.Get_SignatureStringValue_WithoutObsolete_IfObsolete(
+                signatureStringValueMaybeObsolete,
+                out var isObsolete);
+
+            var output = this.Get_TypeSignature_Internal(signatureStringValue);
+
+            output.IsObsolete = isObsolete;
+
+            return output;
+        }
+
+        public PropertySignature Get_PropertySignature(string propertySignatureString)
+        {
+            var kindMarker = this.Get_KindMarker(propertySignatureString);
+
+            if(kindMarker != IKindMarkers.Property_Constant)
+            {
+                throw new Exception($"Property signature string did not begin with the property signature string marker.");
+            }
+
+            var signatureStringValueMaybeObsolete = this.Get_SignatureStringValue(propertySignatureString);
+
+            var signatureStringValue = this.Get_SignatureStringValue_WithoutObsolete_IfObsolete(
+                signatureStringValueMaybeObsolete,
+                out var isObsolete);
+
+            var output = this.Get_PropertySignature_Internal(signatureStringValue);
+
+            output.IsObsolete = isObsolete;
+
+            return output;
+        }
+
         public Signature Get_Signature(string signatureString)
         {
             var kindMarker = this.Get_KindMarker(signatureString);
@@ -34,12 +100,12 @@ namespace R5T.L0065.F004
             Signature output = kindMarker switch
             {
                 IKindMarkers.Error_Constant => throw Instances.ExceptionOperator.Get_ErrorSignatureDoesNotExistException(),
-                IKindMarkers.Event_Constant => this.Get_EventSignature(signatureStringValue),
-                IKindMarkers.Field_Constant => this.Get_FieldSignature(signatureStringValue),
-                IKindMarkers.Method_Constant => this.Get_MethodSignature(signatureStringValue),
+                IKindMarkers.Event_Constant => this.Get_EventSignature_Internal(signatureStringValue),
+                IKindMarkers.Field_Constant => this.Get_FieldSignature_Internal(signatureStringValue),
+                IKindMarkers.Method_Constant => this.Get_MethodSignature_Internal(signatureStringValue),
                 IKindMarkers.Namespace_Constant => throw Instances.ExceptionOperator.Get_NamespaceSignatureDoesNotExistException(),
-                IKindMarkers.Property_Constant => this.Get_PropertySignature(signatureStringValue),
-                IKindMarkers.Type_Constant => this.Get_TypeSignature(signatureStringValue),
+                IKindMarkers.Property_Constant => this.Get_PropertySignature_Internal(signatureStringValue),
+                IKindMarkers.Type_Constant => this.Get_TypeSignature_Internal(signatureStringValue),
                 _ => throw Instances.ExceptionOperator.Get_UnrecognizedKindMarkerException(kindMarker)
             };
 
@@ -48,14 +114,14 @@ namespace R5T.L0065.F004
             return output;
         }
 
-        public EventSignature Get_EventSignature(string eventSignatureStringValue)
+        public EventSignature Get_EventSignature_Internal(string eventSignatureStringValue)
         {
             (string signatureStringPart, string outputTypeName) = this.Get_OutputTypeParts(eventSignatureStringValue);
 
             var (namespacedTypeName, modifiedEventName) = this.Get_LastNamespaceParts(signatureStringPart);
 
-            var declaringType = this.Get_TypeSignature(namespacedTypeName);
-            var eventHandlerType = this.Get_TypeSignature(outputTypeName);
+            var declaringType = this.Get_TypeSignature_Internal(namespacedTypeName);
+            var eventHandlerType = this.Get_TypeSignature_Internal(outputTypeName);
 
             var eventName = this.Modify_MemberName_ForMemberName(modifiedEventName);
             
@@ -70,14 +136,14 @@ namespace R5T.L0065.F004
             return output;
         }
 
-        public FieldSignature Get_FieldSignature(string fieldSignatureStringValue)
+        public FieldSignature Get_FieldSignature_Internal(string fieldSignatureStringValue)
         {
             (string signatureStringPart, string outputTypeName) = this.Get_OutputTypeParts(fieldSignatureStringValue);
 
             var (namespacedTypeName, modifiedFieldName) = this.Get_LastNamespaceParts(signatureStringPart);
 
-            var declaringType = this.Get_TypeSignature(namespacedTypeName);
-            var fieldType = this.Get_TypeSignature(outputTypeName);
+            var declaringType = this.Get_TypeSignature_Internal(namespacedTypeName);
+            var fieldType = this.Get_TypeSignature_Internal(outputTypeName);
 
             var fieldName = this.Modify_MemberName_ForMemberName(modifiedFieldName);
 
@@ -92,7 +158,7 @@ namespace R5T.L0065.F004
             return output;
         }
 
-        public MethodSignature Get_MethodSignature(string methodSignatureStringValue)
+        public MethodSignature Get_MethodSignature_Internal(string methodSignatureStringValue)
         {
             (string signatureStringPart, string outputTypeName) = this.Get_OutputTypeParts(methodSignatureStringValue);
 
@@ -100,13 +166,13 @@ namespace R5T.L0065.F004
             var hasReturnType = outputTypeName != null;
 
             var returnType = hasReturnType
-                ? this.Get_TypeSignature(outputTypeName)
+                ? this.Get_TypeSignature_Internal(outputTypeName)
                 : null
                 ;
 
             var (declaringTypeSignature, modifiedMethodName, methodGenericTypesListValue, parameterListValue) = this.Decompose_MethodSignatureSegments(signatureStringPart);
 
-            var declaringType = this.Get_TypeSignature(declaringTypeSignature);
+            var declaringType = this.Get_TypeSignature_Internal(declaringTypeSignature);
 
             // If the method is a contructor, the return type is the declaring type.
             var isConstructor = modifiedMethodName == "#ctor";
@@ -134,15 +200,15 @@ namespace R5T.L0065.F004
             return output;
         }
 
-        public PropertySignature Get_PropertySignature(string propertySignatureStringValue)
+        public PropertySignature Get_PropertySignature_Internal(string propertySignatureStringValue)
         {
             (string signatureStringPart, string outputTypeName) = this.Get_OutputTypeParts(propertySignatureStringValue);
 
-            var propertyType = this.Get_TypeSignature(outputTypeName);
+            var propertyType = this.Get_TypeSignature_Internal(outputTypeName);
 
             var (declaringTypeSignature, modifiedPropertyName, parameterListValue) = this.Decompose_PropertySignatureSegments(signatureStringPart);
 
-            var declaringType = this.Get_TypeSignature(declaringTypeSignature);
+            var declaringType = this.Get_TypeSignature_Internal(declaringTypeSignature);
 
             var parameters = this.Parse_MethodParameters(parameterListValue);
 
@@ -175,7 +241,7 @@ namespace R5T.L0065.F004
 
                     var elementTypeValue = this.Get_ArrayElementType(typeSignatureStringValue);
 
-                    output.ElementType = this.Get_TypeSignature(elementTypeValue);
+                    output.ElementType = this.Get_TypeSignature_Internal(elementTypeValue);
                 }
 
                 return isArray;
@@ -192,7 +258,7 @@ namespace R5T.L0065.F004
 
                     var elementTypeValue = this.Get_ReferenceElementType(typeSignatureStringValue);
 
-                    output.ElementType = this.Get_TypeSignature(elementTypeValue);
+                    output.ElementType = this.Get_TypeSignature_Internal(elementTypeValue);
                 }
             }
 
@@ -207,7 +273,7 @@ namespace R5T.L0065.F004
 
                     var elementTypeValue = this.Get_PointerElementType(typeSignatureStringValue);
 
-                    output.ElementType = this.Get_TypeSignature(elementTypeValue);
+                    output.ElementType = this.Get_TypeSignature_Internal(elementTypeValue);
                 }
             }
 
@@ -233,7 +299,7 @@ namespace R5T.L0065.F004
             return hasElementType;
         }
 
-        public TypeSignature Get_TypeSignature(string typeSignatureStringValue)
+        public TypeSignature Get_TypeSignature_Internal(string typeSignatureStringValue)
         {
             var output = new TypeSignature();
 
@@ -288,7 +354,7 @@ namespace R5T.L0065.F004
                     indexOfLastNestedTypeTokenSeparator,
                     typeSignatureStringValue);
 
-                output.NestedTypeParent = this.Get_TypeSignature(nestedTypeParentTypeSignatureStringValue);
+                output.NestedTypeParent = this.Get_TypeSignature_Internal(nestedTypeParentTypeSignatureStringValue);
 
                 var hasGenericInputsList = this.Has_GenericInputsList(nestedTypeName);
                 if(hasGenericInputsList)
@@ -396,7 +462,7 @@ namespace R5T.L0065.F004
             var output = listItems
                 .Select(listItem =>
                 {
-                    var typeSignature = this.Get_TypeSignature(listItem);
+                    var typeSignature = this.Get_TypeSignature_Internal(listItem);
                     return typeSignature;
                 })
                 .Now();
@@ -421,7 +487,7 @@ namespace R5T.L0065.F004
                         lastIndexOfParameterNameTokenSeparator,
                         listItem);
 
-                    var parameterType = this.Get_TypeSignature(parameterTypeNamespacedTypeName);
+                    var parameterType = this.Get_TypeSignature_Internal(parameterTypeNamespacedTypeName);
 
                     var output = new MethodParameter
                     {
