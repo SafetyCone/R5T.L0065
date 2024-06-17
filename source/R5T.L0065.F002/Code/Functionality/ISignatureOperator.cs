@@ -12,6 +12,9 @@ using R5T.L0065.T000;
 
 namespace R5T.L0065.F002
 {
+    /// <summary>
+    /// Identity string generation from <see cref="Signature"/> instances.
+    /// </summary>
     [FunctionalityMarker]
     public partial interface ISignatureOperator : IFunctionalityMarker
     {

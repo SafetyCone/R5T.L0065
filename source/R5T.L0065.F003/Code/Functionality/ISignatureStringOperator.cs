@@ -8,6 +8,9 @@ using R5T.L0065.T000;
 
 namespace R5T.L0065.F003
 {
+    /// <summary>
+    /// Gets signature string values from <see cref="Signature"/> instances.
+    /// </summary>
     [FunctionalityMarker]
     public partial interface ISignatureStringOperator : IFunctionalityMarker,
         L0063.F000.ISignatureStringOperator

@@ -18,7 +18,7 @@ namespace R5T.L0065.F002
         public static Z0000.IStrings Strings => Z0000.Strings.Instance;
         public static L0062.F000.ITokenSeparators TokenSeparators => L0062.F000.TokenSeparators.Instance;
         public static L0062.F000.ITypeNameAffixes TypeNameAffixes => L0062.F000.TypeNameAffixes.Instance;
-        public static ITypeNameOperator TypeNameOperator => F002.TypeNameOperator.Instance;
+        public static L0053.ITypeNameOperator TypeNameOperator => L0053.TypeNameOperator.Instance;
         public static L0053.ITypeOperator TypeOperator => L0053.TypeOperator.Instance;
         public static T000.ITypeSignatureOperator TypeSignatureOperator => T000.TypeSignatureOperator.Instance;
     }

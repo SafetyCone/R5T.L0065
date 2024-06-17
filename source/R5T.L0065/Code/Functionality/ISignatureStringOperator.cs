@@ -7,6 +7,9 @@ using R5T.T0132;
 
 namespace R5T.L0065
 {
+    /// <summary>
+    /// Methods for converting signature strings to and from signature instances.
+    /// </summary>
     [FunctionalityMarker]
     public partial interface ISignatureStringOperator : IFunctionalityMarker,
         F003.ISignatureStringOperator,
