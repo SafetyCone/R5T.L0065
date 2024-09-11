@@ -15,11 +15,21 @@ namespace R5T.L0065.F000
     {
         public string Get_NamespacedTypeName(TypeSignature typeSignature)
         {
-            var output = Instances.NamespacedTypeNameOperator.Get_NamespacedTypeName(
+            var type_NamespacedTypeName = Instances.NamespacedTypeNameOperator.Get_NamespacedTypeName(
                 typeSignature.NamespaceName,
                 typeSignature.TypeName);
 
-            return output;
+            if (typeSignature.Is_Nested)
+            {
+                var nestedParentType_NamespacedTypeName = this.Get_NamespacedTypeName(typeSignature.NestedTypeParent);
+
+                var output = $"{nestedParentType_NamespacedTypeName}{Instances.TokenSeparators.NestedTypeNameTokenSeparator}{typeSignature.TypeName}";
+                return output;
+            }
+            else
+            {
+                return type_NamespacedTypeName;
+            }
         }
     }
 }
