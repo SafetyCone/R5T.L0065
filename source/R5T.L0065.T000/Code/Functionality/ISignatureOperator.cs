@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 using R5T.T0132;
@@ -9,6 +11,36 @@ namespace R5T.L0065.T000
     [FunctionalityMarker]
     public partial interface ISignatureOperator : IFunctionalityMarker
     {
+        public void SignatureTypeSwitch(
+            Signature signature,
+            Action<EventSignature> eventSignatureAction,
+            Action<FieldSignature> fieldSignatureAction,
+            Action<PropertySignature> propertySignatureAction,
+            Action<MethodSignature> methodSignatureAction,
+            Action<TypeSignature> typeSignatureAction)
+        {
+            switch (signature)
+            {
+                case EventSignature eventSignature:
+                    eventSignatureAction(eventSignature);
+                    break;
+                case FieldSignature fieldSignature:
+                    fieldSignatureAction(fieldSignature);
+                    break;
+                case PropertySignature propertySignature:
+                    propertySignatureAction(propertySignature);
+                    break;
+                case MethodSignature methodSignature:
+                    methodSignatureAction(methodSignature);
+                    break;
+                case TypeSignature typeSignature:
+                    typeSignatureAction(typeSignature);
+                    break;
+                default:
+                    throw Instances.ExceptionOperator.Get_UnrecognizedSignatureType(signature);
+            };
+        }
+
         public TOutput SignatureTypeSwitch<TOutput>(
             Signature signature,
             Func<EventSignature, TOutput> eventSignatureFunction,

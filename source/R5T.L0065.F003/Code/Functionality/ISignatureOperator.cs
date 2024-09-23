@@ -35,6 +35,12 @@ namespace R5T.L0065.F003
             return output;
         }
 
+        public string Get_FullTypeName(TypeSignature typeSignature)
+            => Instances.FullTypeNameOperator.Get_FullTypeName(typeSignature);
+
+        public string Get_SimpleTypeName(TypeSignature typeSignature)
+            => Instances.FullTypeNameOperator.Get_SimpleTypeName(typeSignature);
+
         public string Get_SignatureStringValue(Signature signature)
         {
             var signatureString = this.Get_SignatureString(signature);
@@ -45,8 +51,8 @@ namespace R5T.L0065.F003
 
         public string Get_SignatureString_ForEvent(EventSignature eventSignature)
         {
-            var declaringTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(eventSignature.DeclaringType);
-            var eventHandlerTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(eventSignature.EventHandlerType);
+            var declaringTypeName = this.Get_FullTypeName(eventSignature.DeclaringType);
+            var eventHandlerTypeName = this.Get_FullTypeName(eventSignature.EventHandlerType);
 
             var eventName = Instances.SignatureStringOperator.Modify_MemberName_ForSignatureString(eventSignature.EventName);
 
@@ -64,8 +70,8 @@ namespace R5T.L0065.F003
 
         public string Get_SignatureString_ForField(FieldSignature fieldSignature)
         {
-            var declaringTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(fieldSignature.DeclaringType);
-            var fieldTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(fieldSignature.FieldType);
+            var declaringTypeName = this.Get_FullTypeName(fieldSignature.DeclaringType);
+            var fieldTypeName = this.Get_FullTypeName(fieldSignature.FieldType);
 
             var fieldName = Instances.SignatureStringOperator.Modify_MemberName_ForSignatureString(fieldSignature.FieldName);
 
@@ -83,8 +89,8 @@ namespace R5T.L0065.F003
 
         public string Get_SignatureString_ForMethod(MethodSignature methodSignature)
         {
-            var declaringTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(methodSignature.DeclaringType);
-            var returnTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(methodSignature.ReturnType);
+            var declaringTypeName = this.Get_FullTypeName(methodSignature.DeclaringType);
+            var returnTypeName = this.Get_FullTypeName(methodSignature.ReturnType);
 
             var methodName = Instances.SignatureStringOperator.Modify_MemberName_ForSignatureString(methodSignature.MethodName);
 
@@ -114,8 +120,8 @@ namespace R5T.L0065.F003
 
         public string Get_SignatureString_ForProperty(PropertySignature propertySignature)
         {
-            var declaringTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(propertySignature.DeclaringType);
-            var propertyTypeName = Instances.FullTypeNameOperator.Get_FullTypeName(propertySignature.PropertyType);
+            var declaringTypeName = this.Get_FullTypeName(propertySignature.DeclaringType);
+            var propertyTypeName = this.Get_FullTypeName(propertySignature.PropertyType);
 
             var propertyName = Instances.SignatureStringOperator.Modify_MemberName_ForSignatureString(propertySignature.PropertyName);
 
@@ -139,7 +145,7 @@ namespace R5T.L0065.F003
 
         public string Get_SignatureString_ForType(TypeSignature typeSignature)
         {
-            var typeName = Instances.FullTypeNameOperator.Get_FullTypeName(typeSignature);
+            var typeName = this.Get_FullTypeName(typeSignature);
             
             // No adjustment necessary.
             var typeSignatureStringValue = typeName;
@@ -171,7 +177,7 @@ namespace R5T.L0065.F003
 
         public string Get_ParameterToken(MethodParameter parameter)
         {
-            var parameterTypeIdentityString = Instances.FullTypeNameOperator.Get_FullTypeName(parameter.ParameterType);
+            var parameterTypeIdentityString = this.Get_FullTypeName(parameter.ParameterType);
 
             var output = Instances.SignatureStringOperator.Append_ParameterName(
                 parameterTypeIdentityString,

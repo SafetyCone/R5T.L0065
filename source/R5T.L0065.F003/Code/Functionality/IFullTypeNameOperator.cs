@@ -10,6 +10,59 @@ namespace R5T.L0065.F003
     [FunctionalityMarker]
     public partial interface IFullTypeNameOperator : IFunctionalityMarker
     {
+        /// <summary>
+        /// Simple type name includes:
+        /// <list type="bullet">
+        /// <item>Generic type parameter and generic method type parameter marker token prefixes ("`" and "``") for generic type and generic method parameters.</item>
+        /// <item>Element type relationship marker token suffixes for types with element types ("[]" for arrays, "&amp;" for references, and "*" for pointers).</item>
+        /// </list>
+        /// It does not include:
+        /// <list type="bullet">
+        /// <item>Namespace for the type.</item>
+        /// <item>Nested parent simple type name (if the type is nested).</item>
+        /// <item>Generic type parameters list.</item>
+        /// </list>
+        /// </summary>
+        public string Get_SimpleTypeName(TypeSignature typeSignature)
+        {
+            string typeIdentityString;
+
+            if (typeSignature.Is_GenericTypeParameter)
+            {
+                typeIdentityString = Instances.TypeNameOperator.Get_GenericTypeParameterMarkedTypeName(typeSignature.TypeName);
+            }
+            else if (typeSignature.Is_GenericMethodParameter)
+            {
+                typeIdentityString = Instances.TypeNameOperator.Get_GenericMethodParameterMarkedTypeName(typeSignature.TypeName);
+            }
+            else if (typeSignature.Has_ElementType)
+            {
+                var elementTypeIdentityString = this.Get_SimpleTypeName(typeSignature.ElementType);
+
+                typeIdentityString = Instances.ElementTypeRelationshipOperator.Append_ElementTypeRelationshipMarkers(
+                    elementTypeIdentityString,
+                    typeSignature.ElementTypeRelationships);
+            }
+            else
+            {
+                typeIdentityString = typeSignature.TypeName;
+            }
+
+            // Do not include the generic type parameters list.
+            var output = typeIdentityString;
+            return output;
+        }
+
+        /// <summary>
+        /// Full type name includes:
+        /// <list type="bullet">
+        /// <item>Namespace for the type.</item>
+        /// <item>Nested parent simple type names (if the type is nested).</item>
+        /// <item>Generic type parameter and generic method type parameter marker tokens ("`" and "``") for generic type and generic method parameters.</item>
+        /// <item>Element type relationship marker token for types with element types ("[]" for arrays, "&amp;" for references, and "*" for pointers).</item>
+        /// <item>Generic type parameters list.</item>
+        /// </list>
+        /// </summary>
         public string Get_FullTypeName(TypeSignature typeSignature)
         {
             string typeIdentityString;
@@ -38,10 +91,7 @@ namespace R5T.L0065.F003
 
                     typeIdentityString = Instances.ElementTypeRelationshipOperator.Append_ElementTypeRelationshipMarkers(
                         elementTypeIdentityString,
-                        typeSignature.ElementTypeRelationships,
-                        "[]",
-                        "&",
-                        "*");
+                        typeSignature.ElementTypeRelationships);
                 }
                 else
                 {

@@ -6,7 +6,7 @@ namespace R5T.L0065.F003
     public static class Instances
     {
         public static L0053.IArrayOperator ArrayOperator => L0053.ArrayOperator.Instance;
-        public static T0221.IElementTypeRelationshipOperator ElementTypeRelationshipOperator => T0221.ElementTypeRelationshipOperator.Instance;
+        public static IElementTypeRelationshipOperator ElementTypeRelationshipOperator => F003.ElementTypeRelationshipOperator.Instance;
         public static T000.IExceptionOperator ExceptionOperator => T000.ExceptionOperator.Instance;
         public static IFullTypeNameOperator FullTypeNameOperator => F003.FullTypeNameOperator.Instance;
         public static L0062.L001.IKindMarkerOperator KindMarkerOperator => L0062.L001.KindMarkerOperator.Instance;
