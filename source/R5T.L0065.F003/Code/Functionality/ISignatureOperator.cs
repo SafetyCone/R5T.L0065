@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 
-using F10Y.L0000.Extensions;
-
 using R5T.L0053.Extensions;
 using R5T.L0063.T000;
 using R5T.L0063.T000.Extensions;
@@ -13,6 +11,9 @@ using R5T.L0065.T000;
 
 namespace R5T.L0065.F003
 {
+    /// <summary>
+    /// Getting signature strings from signature instances.
+    /// </summary>
     [FunctionalityMarker]
     public partial interface ISignatureOperator : IFunctionalityMarker
     {
